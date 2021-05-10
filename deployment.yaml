@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: service-simulation
+  name: service-simulation
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: service-simulation
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: service-simulation
+    spec:
+      containers:
+      - image: kevinbeye123/energygrid8-simulation:latest
+        name: energygrid-service-simulation
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+        resources: {}
