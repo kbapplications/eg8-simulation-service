@@ -31,7 +31,7 @@ metadata:
   name: simulation-service
 spec:
   selector:
-    app: example
+    app: service-simulation
   ports:
     - port: 80
       targetPort: 8080
