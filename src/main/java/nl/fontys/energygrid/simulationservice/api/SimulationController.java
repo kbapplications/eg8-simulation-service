@@ -53,4 +53,9 @@ public class SimulationController extends AbstractController {
                 .build();
         return ResponseEntity.ok(dto);
     }
+
+    @GetMapping("test")
+    public ResponseEntity test() {
+        return ResponseEntity.ok().build();
+    }
 }
