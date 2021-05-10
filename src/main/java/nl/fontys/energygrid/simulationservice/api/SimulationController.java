@@ -55,7 +55,8 @@ public class SimulationController extends AbstractController {
     }
 
     @GetMapping("test")
-    public ResponseEntity test() {
-        return ResponseEntity.ok().build();
+    public ResponseEntity<String> test() {
+        String test = "Hey Jordan, I did not update something but it'll work!";
+        return ResponseEntity.ok(test);
     }
 }
