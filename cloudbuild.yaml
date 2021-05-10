@@ -1,4 +1,10 @@
 steps:
   - name: maven:3-jdk-11
     entrypoint: mvn
+    args: [ "test" ]
+  - name: maven:3-jdk-11
+    entrypoint: mvn
     args: ['package', '-Dmaven.test.skip=true']
+  - name: gcr.io/cloud-builders/docker
+    args: [ 'build', '-t', 'gcr.io/steam-bee-310608/simulation-service', '--build-arg=JAR_FILE=target/simulationservice-0.0.1-SNAPSHOT.jar', '.' ]
+images: [ 'gcr.io/steam-bee-310608/simulation-service' ]
