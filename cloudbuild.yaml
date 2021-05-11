@@ -27,9 +27,7 @@ steps:
     env:
       - 'CLOUDSDK_COMPUTE_ZONE=${_COMPUTE_ZONE}'
       - 'CLOUDSDK_CONTAINER_CLUSTER=${_CLUSTER_NAME}'
-    waitFor:
-      - gke-deploy
-
+      
 substitutions:
     _CLUSTER_NAME: my-first-cluster-1
     _COMPUTE_ZONE: europe-west2
