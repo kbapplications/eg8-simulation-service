@@ -16,10 +16,19 @@ steps:
       - --filename=deployment.yaml
       - --location=europe-west2-c
       - --cluster=my-first-cluster-1
+  
   - name: 'gcr.io/cloud-builders/kubectl'
-    args: ['apply', '-f', 'deployment.yaml']
+    args: 
+      - rollout 
+      - restart 
+      - deployment 
+      - service-simulation
     env:
-      - 'CLOUDSDK_COMPUTE_ZONE=europe-west2-c'
-      - 'CLOUDSDK_CONTAINER_CLUSTER=my-first-cluster-1'
+      - 'CLOUDSDK_COMPUTE_ZONE=${_COMPUTE_ZONE}'
+      - 'CLOUDSDK_CONTAINER_CLUSTER=${_CLUSTER_NAME}'
+      
+substitutions:
+    _CLUSTER_NAME: my-first-cluster-1
+    _COMPUTE_ZONE: europe-west2-c
 
 images: [ 'gcr.io/steam-bee-310608/simulation-service' ]

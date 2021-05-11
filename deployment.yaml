@@ -24,15 +24,3 @@ spec:
         ports:
         - containerPort: 8080
         resources: {}
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: simulation-service
-spec:
-  selector:
-    app: service-simulation
-  ports:
-    - port: 80
-      targetPort: 8080
-  type: LoadBalancer
