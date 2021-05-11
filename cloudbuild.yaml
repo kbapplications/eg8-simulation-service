@@ -30,6 +30,6 @@ steps:
       
 substitutions:
     _CLUSTER_NAME: my-first-cluster-1
-    _COMPUTE_ZONE: europe-west2
+    _COMPUTE_ZONE: europe-west2-c
 
 images: [ 'gcr.io/steam-bee-310608/simulation-service' ]
