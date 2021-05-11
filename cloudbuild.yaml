@@ -16,5 +16,9 @@ steps:
       - --filename=deployment.yaml
       - --location=europe-west2-c
       - --cluster=my-first-cluster-1
+  
+  - name: "linux"
+    args:
+      - kubectl rollout restart deployment service-simulation
 
 images: [ 'gcr.io/steam-bee-310608/simulation-service' ]
