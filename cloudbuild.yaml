@@ -28,7 +28,7 @@ steps:
       - 'CLOUDSDK_COMPUTE_ZONE=${_COMPUTE_ZONE}'
       - 'CLOUDSDK_CONTAINER_CLUSTER=${_CLUSTER_NAME}'
     waitFor:
-      - gcr.io/cloud-builders/gke-deploy
+      - gke-deploy
 
 substitutions:
     _CLUSTER_NAME: my-first-cluster-1
