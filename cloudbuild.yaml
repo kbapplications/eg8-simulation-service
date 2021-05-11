@@ -24,5 +24,7 @@ steps:
       - restart 
       - deployment 
       - service-simulation
+      - --location=europe-west2-c
+      - --cluster=my-first-cluster-1
 
 images: [ 'gcr.io/steam-bee-310608/simulation-service' ]
