@@ -7,6 +7,14 @@ steps:
     entrypoint: mvn
     args: ['package', '-Dmaven.test.skip=true']
 
+  - name: maven:3-jdk-11
+    entrypoint: mvn
+    args:
+      - verify
+      - org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
+      - -Dmaven.test.skip=true
+      - -Dsonar.login=38479ab415397aec08cf5b269170e9fe632184ad
+
   - name: gcr.io/cloud-builders/docker
     args: [ 'build', '-t', 'gcr.io/steam-bee-310608/simulation-service', '--build-arg=JAR_FILE=target/simulationservice-0.0.1-SNAPSHOT.jar', '.' ]
 

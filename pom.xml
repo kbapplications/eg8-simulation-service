@@ -15,6 +15,8 @@
 	<description>Simulation service for EG8</description>
 	<properties>
 		<java.version>11</java.version>
+		<maven.compiler.source>11</maven.compiler.source>
+		<maven.compiler.target>11</maven.compiler.target>
 		<mapstruct.version>1.4.2.Final</mapstruct.version>
 		<mavencompiler.version>3.8.1</mavencompiler.version>
 		<lombokmapstruct.version>0.2.0</lombokmapstruct.version>
@@ -22,6 +24,10 @@
 		<postgresql.version>42.2.19</postgresql.version>
 		<powermock.version>1.6.4</powermock.version>
 		<mockito.version>3.8.0</mockito.version>
+
+		<sonar.projectKey>kbapplications_eg8-simulation-service</sonar.projectKey>
+		<sonar.organization>kbapplications</sonar.organization>
+		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
 	</properties>
 	<dependencies>
 <!--		<dependency>-->

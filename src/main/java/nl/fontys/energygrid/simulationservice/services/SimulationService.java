@@ -64,9 +64,9 @@ public class SimulationService implements SimulationController.SimulateDelegate 
         }
 
         for(Region region : regions) {
-            region.setProduction(ThreadLocalRandom.current().nextInt(100, 250 + 1));
-            region.setConsumption(ThreadLocalRandom.current().nextInt(80, 200 + 1));
             region.setProductionDetails(getDetails());
+            region.setProduction(getDetails().stream().mapToInt(ProductionDetail::getAmount).sum());
+            region.setConsumption(ThreadLocalRandom.current().nextInt(80, 200 + 1));
             timeslot.getRegions().add(region);
         }
 
