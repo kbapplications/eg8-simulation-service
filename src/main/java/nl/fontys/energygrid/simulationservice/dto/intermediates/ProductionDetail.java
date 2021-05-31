@@ -9,4 +9,5 @@ import nl.fontys.energygrid.simulationservice.model.EnergyType;
 public class ProductionDetail {
     private EnergyType type;
     private int amount;
+    private boolean doesProduce;
 }
