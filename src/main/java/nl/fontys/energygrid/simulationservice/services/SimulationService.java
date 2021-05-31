@@ -60,9 +60,6 @@ public class SimulationService implements SimulationController.SimulateDelegate 
                 regions.add(region);
         }
 
-        if(regions == null)
-            regions = new ArrayList<>();
-
         for(Region region : regions) {
             region.setProduction(region.getProductionDetails().stream().filter(ProductionDetail::isDoesProduce).mapToInt(ProductionDetail::getAmount).sum());
             region.setConsumption(region.getProductionDetails().stream().filter(p -> !p.isDoesProduce()).mapToInt(ProductionDetail::getAmount).sum());

@@ -28,7 +28,7 @@ public class RegionClient {
     public List<Region> getRegions() {
         DTOWrapper wrapper = template.getForObject(REGIONS_URL, DTOWrapper.class);
         if(wrapper == null)
-            return null;
+            return new ArrayList<>();
         List<ExternalRegion> exRegions = mapper.convertValue(wrapper.getData(), new TypeReference<>(){});
         return externalToLocalRegion(exRegions);
     }
