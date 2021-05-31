@@ -9,16 +9,16 @@ public class AbstractController {
     public <T> T call(String operation, Supplier<T> supplier) {
         log.info(">> {}", operation);
         final long start = System.currentTimeMillis();
-        long duration = 0L;
+        var duration = 0L;
         try {
-            T retVal = supplier.get();
+            var retVal = supplier.get();
             duration = System.currentTimeMillis() - start;
             log.info("<< {} [{} ms]", operation, duration);
             return retVal;
-        } catch(Throwable t) {
+        } catch(Exception ex) {
             duration = System.currentTimeMillis() - start;
             log.warn("<< {} (FAULT) [{} ms]", operation, duration);
-            throw t;
+            throw ex;
         }
     }
 }

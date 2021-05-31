@@ -7,11 +7,9 @@ import nl.fontys.energygrid.simulationservice.dto.DTOWrapper;
 import nl.fontys.energygrid.simulationservice.dto.external.ExternalRegion;
 import nl.fontys.energygrid.simulationservice.dto.intermediates.ProductionDetail;
 import nl.fontys.energygrid.simulationservice.dto.intermediates.Region;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,12 +27,16 @@ public class RegionClient {
 
     public List<Region> getRegions() {
         DTOWrapper wrapper = template.getForObject(REGIONS_URL, DTOWrapper.class);
+        if(wrapper == null)
+            return null;
         List<ExternalRegion> exRegions = mapper.convertValue(wrapper.getData(), new TypeReference<>(){});
         return externalToLocalRegion(exRegions);
     }
 
     public Region getRegionById(String id) {
         DTOWrapper wrapper = template.getForObject(utils.formatUrl(REGION_BY_ID_URL, "id", id), DTOWrapper.class);
+        if(wrapper == null)
+            return null;
         List<ExternalRegion> exRegions = mapper.convertValue(wrapper.getData(), new TypeReference<>(){});
         return externalToLocalRegion(exRegions).get(0);
     }
@@ -51,19 +53,16 @@ public class RegionClient {
                 prodDetails.add(pd);
             });
         }
-        Region region = Region.builder()
+        return Region.builder()
                 .id(exRegion.getId().toString())
                 .name(exRegion.getName())
                 .productionDetails(prodDetails)
                 .build();
-        return region;
     }
 
     private List<Region> externalToLocalRegion(List<ExternalRegion> exRegions) {
         List<Region> regions = new ArrayList<>();
-        exRegions.forEach(er -> {
-            regions.add(externalToLocalRegion(er));
-        });
+        exRegions.forEach(er -> regions.add(externalToLocalRegion(er)));
         return regions;
     }
 

@@ -25,10 +25,10 @@ public class SimulationController extends AbstractController {
     private final Optional<SimulateDelegate> simulateDelegate;
 
     @PostMapping("/from/{start}/to/{end}")
-    public ResponseEntity simulate(@PathVariable String start,
+    public ResponseEntity<DTOWrapper> simulate(@PathVariable String start,
                                    @PathVariable String end,
                                    @RequestParam(required = false) String regionId) {
-        if(!simulateDelegate.isPresent()) {
+        if(simulateDelegate.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
         }
 

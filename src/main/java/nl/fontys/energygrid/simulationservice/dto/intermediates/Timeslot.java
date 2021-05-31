@@ -2,7 +2,6 @@ package nl.fontys.energygrid.simulationservice.dto.intermediates;
 
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.util.List;
 

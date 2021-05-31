@@ -8,11 +8,12 @@ import java.util.Map;
 @Component
 public class UrlUtils {
     public String formatUrl(String url, Map<String, String> values) {
-        String newUrl = url;
-        values.forEach((k, v) -> {
-            newUrl.replace("{" + k + "}", v);
-        });
-        return newUrl;
+        for (Map.Entry<String, String> entry : values.entrySet()) {
+            String k = entry.getKey();
+            String v = entry.getValue();
+            url = url.replace("{" + k + "}", v);
+        }
+        return url;
     }
     public String formatUrl(String url, String key, String value) {
         Map<String, String> map = new HashMap<>();
