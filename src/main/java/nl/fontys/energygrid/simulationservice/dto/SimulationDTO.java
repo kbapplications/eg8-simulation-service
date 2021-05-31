@@ -9,7 +9,7 @@ import java.util.List;
 
 @Builder
 @Data
-public class SimulationDTO implements iDTO {
+public class SimulationDTO {
     private DateFilter filter;
     private List<Timeslot> timeslots;
 }

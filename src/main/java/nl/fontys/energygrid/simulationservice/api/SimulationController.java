@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import nl.fontys.energygrid.simulationservice.dto.DTOWrapper;
 import nl.fontys.energygrid.simulationservice.dto.SimulationDTO;
-import nl.fontys.energygrid.simulationservice.dto.iDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -48,15 +47,9 @@ public class SimulationController extends AbstractController {
             return ResponseEntity.notFound().build();
         }
 
-        DTOWrapper<iDTO> dto = DTOWrapper.builder()
+        DTOWrapper dto = DTOWrapper.builder()
                 .data(res)
                 .build();
         return ResponseEntity.ok(dto);
-    }
-
-    @GetMapping("test")
-    public ResponseEntity<String> test() {
-        String test = "DID IT CHANGE?!!!!";
-        return ResponseEntity.ok(test);
     }
 }

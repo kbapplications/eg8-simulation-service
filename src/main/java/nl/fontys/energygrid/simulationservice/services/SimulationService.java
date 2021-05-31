@@ -2,7 +2,7 @@ package nl.fontys.energygrid.simulationservice.services;
 
 import lombok.RequiredArgsConstructor;
 import nl.fontys.energygrid.simulationservice.api.SimulationController;
-import nl.fontys.energygrid.simulationservice.dal.RegionRepository;
+import nl.fontys.energygrid.simulationservice.dal.RegionClient;
 import nl.fontys.energygrid.simulationservice.dto.SimulationDTO;
 import nl.fontys.energygrid.simulationservice.dto.intermediates.DateFilter;
 import nl.fontys.energygrid.simulationservice.dto.intermediates.ProductionDetail;
@@ -22,7 +22,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class SimulationService implements SimulationController.SimulateDelegate {
     private static final int MINUTES_TILL_NEXT_PERIOD = 60;
 
-    private final RegionRepository regionRepository;
+    private final RegionClient regionClient;
 
     @Override
     public SimulationDTO simulate(LocalDateTime from, LocalDateTime to, String regionId) {
@@ -56,30 +56,20 @@ public class SimulationService implements SimulationController.SimulateDelegate 
 
         List<Region> regions = new ArrayList<>();
         if(regionId == null || regionId.isBlank()) {
-            regions = regionRepository.getRegions();
+            regions = regionClient.getRegions();
         } else {
-            Optional<Region> region = regionRepository.getRegionById(Long.parseLong(regionId));
-            if(region.isPresent())
-                regions.add(region.get());
+            Region region = regionClient.getRegionById(regionId);
+            if(region != null)
+                regions.add(region);
         }
 
         for(Region region : regions) {
-            region.setProductionDetails(getDetails());
-            region.setProduction(getDetails().stream().mapToInt(ProductionDetail::getAmount).sum());
-            region.setConsumption(ThreadLocalRandom.current().nextInt(80, 200 + 1));
+            region.setProduction(region.getProductionDetails().stream().filter(p -> p.isDoesProduce()).mapToInt(ProductionDetail::getAmount).sum());
+            region.setConsumption(region.getProductionDetails().stream().filter(p -> !p.isDoesProduce()).mapToInt(ProductionDetail::getAmount).sum());
             region.setSustainability(((float) region.getProduction() / (float) region.getConsumption()) * 100);
             timeslot.getRegions().add(region);
         }
 
         return timeslot;
-    }
-
-    private List<ProductionDetail> getDetails() {
-        int rand = ThreadLocalRandom.current().nextInt(50, 125 + 1);
-        int rand2 = ThreadLocalRandom.current().nextInt(40, 100 + 1);
-        List<ProductionDetail> details = new ArrayList<>();
-        details.add(ProductionDetail.builder().type(EnergyType.NUCLEAR).amount(rand).build());
-        details.add(ProductionDetail.builder().type(EnergyType.SOLAR).amount(rand2).build());
-        return details;
     }
 }
