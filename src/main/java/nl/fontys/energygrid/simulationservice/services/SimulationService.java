@@ -55,7 +55,7 @@ public class SimulationService implements SimulationController.SimulateDelegate 
         Timeslot timeslot = timeslotBuilder.build();
 
         List<Region> regions = new ArrayList<>();
-        if(regionId == null || regionId.isBlank()) {
+        if(regionId == null || regionId.isBlank()) {/
             regions = regionRepository.getRegions();
         } else {
             Optional<Region> region = regionRepository.getRegionById(Long.parseLong(regionId));
@@ -67,6 +67,7 @@ public class SimulationService implements SimulationController.SimulateDelegate 
             region.setProductionDetails(getDetails());
             region.setProduction(getDetails().stream().mapToInt(ProductionDetail::getAmount).sum());
             region.setConsumption(ThreadLocalRandom.current().nextInt(80, 200 + 1));
+            region.setSustainability(((float) region.getProduction() / (float) region.getConsumption()) * 100);
             timeslot.getRegions().add(region);
         }
 
