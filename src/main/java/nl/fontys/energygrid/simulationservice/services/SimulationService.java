@@ -55,7 +55,7 @@ public class SimulationService implements SimulationController.SimulateDelegate 
         Timeslot timeslot = timeslotBuilder.build();
 
         List<Region> regions = new ArrayList<>();
-        if(regionId == null || regionId.isBlank()) {/
+        if(regionId == null || regionId.isBlank()) {
             regions = regionRepository.getRegions();
         } else {
             Optional<Region> region = regionRepository.getRegionById(Long.parseLong(regionId));
