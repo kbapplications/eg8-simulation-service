@@ -13,6 +13,9 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -61,6 +64,14 @@ public class SimulationService implements SimulationController.SimulateDelegate 
         }
 
         for(Region region : regions) {
+            List<ProductionDetail> productionDetails = region.getProductionDetails();
+
+            productionDetails.forEach((productionDetail) -> {
+                productionDetail.setAmount(Math.round(productionDetail.getAmount() * getModifier()));
+            });
+
+            region.setProductionDetails(productionDetails);
+
             region.setProduction(region.getProductionDetails().stream().filter(ProductionDetail::isDoesProduce).mapToInt(ProductionDetail::getAmount).sum());
             region.setConsumption(region.getProductionDetails().stream().filter(p -> !p.isDoesProduce()).mapToInt(ProductionDetail::getAmount).sum());
             region.setSustainability(((float) region.getProduction() / (float) region.getConsumption()) * 100);
@@ -68,5 +79,12 @@ public class SimulationService implements SimulationController.SimulateDelegate 
         }
 
         return timeslot;
+    }
+
+    private float getModifier() {
+        float min = 0.9f;
+        float max = 1.1f;
+
+        return min + new Random().nextFloat() * (max - min);
     }
 }
