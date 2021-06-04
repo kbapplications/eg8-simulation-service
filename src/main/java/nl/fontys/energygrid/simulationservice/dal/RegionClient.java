@@ -17,8 +17,8 @@ import java.util.List;
 @Component
 public class RegionClient {
 
-    private static final String REGIONS_URL = "http://localhost:28080/api/regions/";
-    private static final String REGION_BY_ID_URL = "http://localhost:28080/api/regions/{id}";
+    private static final String REGIONS_URL = "http://region-service.eg8.kb-sandbox.nl/api/regions/";
+    private static final String REGION_BY_ID_URL = "http://region-service.eg8.kb-sandbox.nl/api/regions/{id}";
 
     private final RestTemplate template;
     private final UrlUtils utils;
