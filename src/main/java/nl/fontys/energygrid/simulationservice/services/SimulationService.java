@@ -21,7 +21,9 @@ import java.util.stream.Stream;
 @RequiredArgsConstructor
 public class SimulationService implements SimulationController.SimulateDelegate {
     private static final int MINUTES_TILL_NEXT_PERIOD = 60;
+
     private static final float MAX_SUSTAINABILITY_PERCENTAGE = 300f;
+    private static final float DEFAULT_SUSTAINABILITY_PERCENTAGE = 100f;
 
     private final RegionClient regionClient;
 
@@ -76,7 +78,10 @@ public class SimulationService implements SimulationController.SimulateDelegate 
             region.setProduction(region.getProductionDetails().stream().filter(ProductionDetail::isDoesProduce).mapToInt(ProductionDetail::getAmount).sum());
             region.setConsumption(region.getProductionDetails().stream().filter(p -> !p.isDoesProduce()).mapToInt(ProductionDetail::getAmount).sum());
 
-            if(region.getConsumption() <= 0) {
+            if(region.getConsumption() <= 0 && region.getProduction() <= 0) {
+                region.setSustainability(DEFAULT_SUSTAINABILITY_PERCENTAGE);
+            }
+            else if(region.getConsumption() <= 0) {
                 region.setSustainability(MAX_SUSTAINABILITY_PERCENTAGE);
             }
             else {
