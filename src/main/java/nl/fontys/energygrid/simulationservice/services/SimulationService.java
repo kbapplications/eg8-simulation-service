@@ -31,6 +31,9 @@ public class SimulationService implements SimulationController.SimulateDelegate 
     private static final int MINUTES_TILL_NEXT_PERIOD = 60;
     private static final ZoneId ZONE = ZoneId.of("Europe/Berlin");
 
+    private static final float MAX_SUSTAINABILITY_PERCENTAGE = 300f;
+    private static final float DEFAULT_SUSTAINABILITY_PERCENTAGE = 100f;
+
     private final RegionClient regionClient;
     private final WeatherClient weatherClient;
 
@@ -97,7 +100,23 @@ public class SimulationService implements SimulationController.SimulateDelegate 
 
             region.setProduction(region.getProductionDetails().stream().filter(ProductionDetail::isDoesProduce).mapToInt(ProductionDetail::getAmount).sum());
             region.setConsumption(region.getProductionDetails().stream().filter(p -> !p.isDoesProduce()).mapToInt(ProductionDetail::getAmount).sum());
-            region.setSustainability(((float) region.getProduction() / (float) region.getConsumption()) * 100);
+
+            if(region.getConsumption() <= 0 && region.getProduction() <= 0) {
+                region.setSustainability(DEFAULT_SUSTAINABILITY_PERCENTAGE);
+            }
+            else if(region.getConsumption() <= 0) {
+                region.setSustainability(MAX_SUSTAINABILITY_PERCENTAGE);
+            }
+            else {
+                float sustainability = ((float) region.getProduction() / (float) region.getConsumption()) * 100;
+
+                if(sustainability > MAX_SUSTAINABILITY_PERCENTAGE) {
+                    sustainability = MAX_SUSTAINABILITY_PERCENTAGE;
+                }
+
+                region.setSustainability(sustainability);
+            }
+
             timeslot.getRegions().add(region);
         }
 
@@ -114,15 +133,23 @@ public class SimulationService implements SimulationController.SimulateDelegate 
                 return weather.getWindSpeed();
             case SOLAR_HOME:
             case SOLAR_PARK:
-                long secondsWithSun = weather.getSunset() - weather.getSunrise();
-                long current = secondsWithSun - ((weather.getSunset() - timestamp) / 1000);
-
-                return (Math.abs((secondsWithSun / 2f) - current) / (secondsWithSun / 2f));
+                return getSolarModifier(weather.getSunrise(), weather.getSunset(), timestamp);
             default:
                 float min = 0.9f;
                 float max = 1.1f;
 
                 return min + new Random().nextFloat() * (max - min);
         }
+    }
+
+    private float getSolarModifier(long sunrise, long sunset, long timestamp) {
+        if((timestamp / 1000) > sunset || (timestamp / 1000) < sunrise) {
+            return 0f;
+        }
+
+        long secondsWithSun = sunset - sunrise;
+        long current = secondsWithSun - ((sunset - timestamp) / 1000);
+
+        return (Math.abs((secondsWithSun / 2f) - current) / (secondsWithSun / 2f));
     }
 }
