@@ -2,8 +2,10 @@ package nl.fontys.energygrid.simulationservice.api;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import nl.fontys.energygrid.simulationservice.dal.WeatherClient;
 import nl.fontys.energygrid.simulationservice.dto.DTOWrapper;
 import nl.fontys.energygrid.simulationservice.dto.SimulationDTO;
+import nl.fontys.energygrid.simulationservice.dto.external.weather.WeatherDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +25,13 @@ public class SimulationController extends AbstractController {
     }
 
     private final Optional<SimulateDelegate> simulateDelegate;
+    private final WeatherClient weatherClient;
+
+    @GetMapping("/")
+    public ResponseEntity<WeatherDTO> test() {
+        WeatherDTO dto = weatherClient.getWeatherForRegion("breda", 1511131146L);
+        return ResponseEntity.ok(dto);
+    }
 
     @PostMapping("/from/{start}/to/{end}")
     public ResponseEntity<DTOWrapper> simulate(@PathVariable String start,
